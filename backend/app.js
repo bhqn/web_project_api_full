@@ -1,19 +1,24 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const usersRouter = require('./routes/users');
-const cardsRouter = require('./routes/cards');
+const usersRouter = require("./routes/users");
+const cardsRouter = require("./routes/cards");
+const { createUser, login } = require("./controllers/users");
 
-mongoose.connect('mongodb://localhost:27017/aroundb');
+mongoose.connect("mongodb://localhost:27017/aroundb");
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(express.json());
 
+// Rotas que NÃO precisam de autenticação
+app.post("/signup", createUser);
+app.post("/signin", login);
+
 // MIDDLEWARE DE AUTORIZAÇÃO TEMPORÁRIA (ANTES DAS ROTAS!)
 app.use((req, res, next) => {
   req.user = {
-    _id: '6924be802b78f9c6ea42c848',
+    _id: "6924be802b78f9c6ea42c848",
   };
   next();
 });
@@ -24,8 +29,8 @@ app.get("/", (req, res) => {
 });
 
 // criando as rotas
-app.use('/users', usersRouter);
-app.use('/cards', cardsRouter);
+app.use("/users", usersRouter);
+app.use("/cards", cardsRouter);
 
 // Middleware para recursos não encontrados (404)
 app.use((req, res) => {

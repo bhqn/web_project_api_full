@@ -3,7 +3,6 @@ const router = express.Router();
 const {
   getUsers,
   getUser,
-  createUser,
   getCurrentUser,
   updateAvatar,
 } = require("../controllers/users");
@@ -13,6 +12,6 @@ router.get("/", getUsers);
 router.get("/me", getCurrentUser);
 router.patch("/me/avatar", updateAvatar);
 router.get("/:userId", getUser);
-router.post("/", createUser);
+// router.post("/", createUser); <- REMOVIDA
 
 module.exports = router;
