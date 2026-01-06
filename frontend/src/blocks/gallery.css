@@ -1,0 +1,84 @@
+.gallery {
+  padding-top: 50px;
+  object-fit: cover;
+
+  display: grid;
+  grid-template-areas:
+    "card card card"
+    "card card card";
+
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+}
+
+.gallery__card {
+  grid-area: "card";
+  width: 282px;
+  height: 361px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.gallery__image {
+  cursor: pointer;
+  object-fit: cover;
+  width: 282px;
+  height: 282px;
+  overflow: hidden;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+@media (max-width: 800px) {
+  .gallery {
+    padding-top: 50px;
+    object-fit: cover;
+    width: 584px;
+    margin: auto;
+    display: grid;
+    grid-template-areas:
+      "card card"
+      "card card"
+      "card card";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 320px) {
+  .gallery {
+    width: 282px;
+    padding-top: 50px;
+    object-fit: cover;
+    display: grid;
+    grid-template-areas:
+      "card"
+      "card"
+      "card"
+      "card"
+      "card"
+      "card";
+    grid-template-columns: 1fr;
+    justify-items: center;
+
+    margin: auto;
+  }
+
+  .gallery__card {
+    grid-area: "card";
+    width: 282px;
+    height: 361px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "project_around_express",
+  "version": "1.0.0",
+  "description": "projeto_express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bhqn/web_project_around_express.git"
+  },
+  "author": "Bernardo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bhqn/web_project_around_express/issues"
+  },
+  "homepage": "https://github.com/bhqn/web_project_around_express#readme",
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^9.0.0"
+  }
+}
