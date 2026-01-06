@@ -94,7 +94,7 @@ module.exports.login = (req, res) => {
           }
 
           // 6 Cria o JSON Web Token (JWT)
-          const token = jwt.sign({ _id: user._id }, "minha-chave-secreta-temporaria", {
+          const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
             expiresIn: "7d",
           });
 
