@@ -2,6 +2,8 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+
+
 // GET /users - retorna todos os usuários
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -112,3 +114,6 @@ module.exports.login = (req, res) => {
       return res.status(500).json({ message: "Erro interno do servidor" });
     });
 };
+
+
+

@@ -51,7 +51,7 @@ module.exports.dislikeCard = (req, res, next) => {
 };
 
 // DELETE /cards/:cardId - deleta cartão
-module.exports.deleteCard = (req, res, next) => {
+/* module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndDelete(req.params.cardId)
     // eslint-disable-next-line consistent-return
     .then((card) => {
@@ -59,6 +59,29 @@ module.exports.deleteCard = (req, res, next) => {
         return res.status(404).send({ message: 'Cartão não encontrado' });
       }
       res.send({ data: card });
+    })
+    .catch(next);
+}; */
+
+
+module.exports.deleteCard = (req, res, next) => {
+  // Primeiro: buscar o cartão para verificar o dono
+  Card.findById(req.params.cardId)
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Cartão não encontrado' });
+      }
+      
+      // Segundo: verificar se o usuário é o dono do cartão
+      if (card.owner.toString() !== req.user._id) {
+        return res.status(403).send({ message: 'Acesso negado' });
+      }
+      
+      // Terceiro: se for o dono, pode deletar
+      return Card.findByIdAndDelete(req.params.cardId);
+    })
+    .then((deletedCard) => {
+      res.send({ data: deletedCard });
     })
     .catch(next);
 };

@@ -13,6 +13,11 @@ import Popup from "./Main/components/Popup/Popup";
 import ImagePopup from "./Main/components/ImagePopup/ImagePopup.jsx";
 
 function App() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+
   const [popup, setPopup] = useState(null);
 
   const [currentUser, setCurrentUser] = useState({});
@@ -61,14 +66,21 @@ function App() {
   }
 
   useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userData) => {
-        setCurrentUser(userData);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados do usuário:", error);
-      });
+    const token = localStorage.getItem("token");
+    if (token) {
+      api
+        .getUserInfo()
+        .then((userData) => {
+          setCurrentUser(userData);
+          setIsLoggedIn(true);
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar dados do usuário:", error);
+          localStorage.removeItem('token');
+          setToken('');
+          setIsLoggedIn(false); 
+        });
+    }
   }, []);
 
   const handleUpdateUser = (data) => {
@@ -136,7 +148,6 @@ function App() {
           selectedCard={selectedCard}
         />
         <Footer />
-
       </CurrentUserContext.Provider>
     </div>
   );

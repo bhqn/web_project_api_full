@@ -17,12 +17,12 @@ app.post("/signup", createUser);
 app.post("/signin", login);
 
 // MIDDLEWARE DE AUTORIZAÇÃO TEMPORÁRIA (ANTES DAS ROTAS!)
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   req.user = {
     _id: "6924be802b78f9c6ea42c848",
   };
   next();
-});
+}); */
 
 // rota para a raiz do site
 app.get("/", (req, res) => {

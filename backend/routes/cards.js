@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("../middlewares/auth");
 const router = express.Router();
 const {
   getCards,
@@ -9,10 +10,10 @@ const {
 } = require("../controllers/cards");
 
 // Apenas estas rotas conectadas aos controllers
-router.get("/", getCards);
-router.post("/", createCard);
-router.put("/:cardId/likes", likeCard);
-router.put("/:cardId/dislikes", dislikeCard);
-router.delete("/:cardId", deleteCard);
+router.get("/", auth, getCards);
+router.post("/", auth, createCard);
+router.put("/:cardId/likes", auth, likeCard);
+router.put("/:cardId/dislikes", auth, dislikeCard);
+router.delete("/:cardId", auth, deleteCard);
 
 module.exports = router;

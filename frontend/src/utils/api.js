@@ -5,6 +5,12 @@ class Api {
   }
 
   _makeRequest(endpoint, options = {}) {
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      this._headers.authorization = `Bearer ${token}`;
+    }
+
     return fetch(`${this._baseUrl}${endpoint}`, {
       headers: this._headers,
       ...options,
@@ -19,11 +25,11 @@ class Api {
   }
 
   getInitialCards() {
-    return this._makeRequest('/cards');
+    return this._makeRequest("/cards");
   }
 
   getUserInfo() {
-    return this._makeRequest('/users/me');
+    return this._makeRequest("/users/me");
   }
 
   // metodo para adicionar like
@@ -51,7 +57,7 @@ class Api {
   }
 
   updateUserInfo(data) {
-    return this._makeRequest('/users/me', {
+    return this._makeRequest("/users/me", {
       method: "PATCH",
       body: JSON.stringify({
         name: data.name,
@@ -63,7 +69,7 @@ class Api {
   updateAvatarInfo(data) {
     console.log("Enviando para API:", data);
 
-    return this._makeRequest('/users/me/avatar', {
+    return this._makeRequest("/users/me/avatar", {
       method: "PATCH",
       body: JSON.stringify({
         avatar: data.avatar,
@@ -73,7 +79,7 @@ class Api {
 
   // criar card
   addCard(data) {
-    return this._makeRequest('/cards', {
+    return this._makeRequest("/cards", {
       method: "POST",
       body: JSON.stringify({
         name: data.name,
@@ -97,7 +103,7 @@ class Api {
 const api = new Api({
   baseUrl: "https://around-api.pt-br.tripleten-services.com/v1",
   headers: {
-    authorization: "c2b29e92-9f38-419a-be2d-1ca3d5baf512",
+    // authorization: "c2b29e92-9f38-419a-be2d-1ca3d5baf512",
     "Content-Type": "application/json",
   },
 });
