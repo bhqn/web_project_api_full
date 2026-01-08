@@ -1,0 +1,49 @@
+.register__input{
+background-color: transparent;
+ border: none; 
+  border-bottom: 1px solid #fff;
+   color: #ffffff;
+}
+
+.register__input-password{
+margin-top: 30px;
+}
+
+.register__form{margin: auto;
+    
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    width: 358px;
+}
+
+.register__link{
+    margin-top: 216px;
+    height: 58px;
+    width: 100%;
+    
+    background-color: #fff;
+    font-size: 18px
+    
+}
+.register__signin{
+    margin-top: 15px;
+    display: flex;
+  color: #fff;
+  margin: auto;
+}
+
+.register__login-link{
+    margin-left: 10px ;
+    margin-top: 15px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.register__welcome
+{   font-size: 24px;
+    margin: auto;
+    margin-top: 60px;
+    margin-bottom: 50px;
+    color: #fff;}

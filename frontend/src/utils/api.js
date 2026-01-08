@@ -4,13 +4,9 @@ class Api {
     this._headers = options.headers;
   }
 
+  // método para atualizar o token depois do login
+
   _makeRequest(endpoint, options = {}) {
-
-    const token = localStorage.getItem("token");
-    if (token) {
-      this._headers.authorization = `Bearer ${token}`;
-    }
-
     return fetch(`${this._baseUrl}${endpoint}`, {
       headers: this._headers,
       ...options,
@@ -67,8 +63,6 @@ class Api {
   }
 
   updateAvatarInfo(data) {
-    console.log("Enviando para API:", data);
-
     return this._makeRequest("/users/me/avatar", {
       method: "PATCH",
       body: JSON.stringify({
@@ -103,8 +97,8 @@ class Api {
 const api = new Api({
   baseUrl: "https://around-api.pt-br.tripleten-services.com/v1",
   headers: {
-    // authorization: "c2b29e92-9f38-419a-be2d-1ca3d5baf512",
-    "Content-Type": "application/json",
+    authorization: "c2b29e92-9f38-419a-be2d-1ca3d5baf512",
+    "content-type": "application/json",
   },
 });
 

@@ -5,9 +5,12 @@ const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 const { createUser, login } = require("./controllers/users");
 
-mongoose.connect("mongodb://localhost:27017/aroundb");
 
-const { PORT = 3000 } = process.env;
+if (process.env.NODE_ENV !== "test") {
+mongoose.connect(process.env.MONGO_URI);
+}
+
+
 const app = express();
 
 app.use(express.json());
@@ -48,6 +51,4 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+module.exports = app;
