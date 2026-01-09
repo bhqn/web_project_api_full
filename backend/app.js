@@ -5,11 +5,11 @@ const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 const { createUser, login } = require("./controllers/users");
 
-
-if (process.env.NODE_ENV !== "test") {
+//para rodar teste
+//if (process.env.NODE_ENV !== "test") {
+//mongoose.connect(process.env.MONGO_URI);
+//}
 mongoose.connect(process.env.MONGO_URI);
-}
-
 
 const app = express();
 
