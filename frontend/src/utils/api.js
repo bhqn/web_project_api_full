@@ -97,7 +97,7 @@ class Api {
 const api = new Api({
   baseUrl: "https://web-project-api-full-tx7d.onrender.com",
   headers: {
-    authorization: "c2b29e92-9f38-419a-be2d-1ca3d5baf512",
+     authorization: `Bearer ${localStorage.getItem('jwt')}`,
     "content-type": "application/json",
   },
 });
