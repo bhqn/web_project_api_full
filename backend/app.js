@@ -9,10 +9,10 @@ const { createUser, login } = require("./controllers/users");
 //if (process.env.NODE_ENV !== "test") {
 //mongoose.connect(process.env.MONGO_URI);
 //}
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+//mongoose.connect(process.env.MONGO_URI, {
+//  useNewUrlParser: true,
+ // useUnifiedTopology: true,
+//});
 
 const app = express();
 
