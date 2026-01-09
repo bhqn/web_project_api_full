@@ -4,6 +4,17 @@ const mongoose = require("mongoose");
 const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 const { createUser, login } = require("./controllers/users");
+const cors = require("cors");
+
+
+const app = express();
+// Middleware CORS
+app.use(cors({
+  origin: 'https://web-project-frontend-git-main-bernardos-projects-04d5b6bc.vercel.app',
+  credentials: true, // se enviar token/cookies
+  methods: ['GET','POST','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
+}));
 
 //para rodar teste
 //if (process.env.NODE_ENV !== "test") {
@@ -14,7 +25,7 @@ const { createUser, login } = require("./controllers/users");
  // useUnifiedTopology: true,
 //});
 
-const app = express();
+
 
 app.use(express.json());
 
