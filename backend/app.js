@@ -9,12 +9,16 @@ const { createUser, login } = require("./controllers/users");
 //if (process.env.NODE_ENV !== "test") {
 //mongoose.connect(process.env.MONGO_URI);
 //}
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ Mongo conectado'))
-  .catch(err => {
-    console.error('❌ Erro Mongo:', err.message);
-    process.exit(1);
-  });
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log("✅ MongoDB conectado com sucesso!");
+})
+.catch((err) => {
+  console.error("❌ Erro ao conectar no MongoDB:", err);
+});
 
 const app = express();
 
