@@ -9,7 +9,12 @@ const { createUser, login } = require("./controllers/users");
 //if (process.env.NODE_ENV !== "test") {
 //mongoose.connect(process.env.MONGO_URI);
 //}
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Mongo conectado'))
+  .catch(err => {
+    console.error('❌ Erro Mongo:', err.message);
+    process.exit(1);
+  });
 
 const app = express();
 
