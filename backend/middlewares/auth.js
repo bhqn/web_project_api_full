@@ -12,6 +12,8 @@ module.exports = (req, res, next) => {
   // 3. Extrair apenas o token (remover 'Bearer ')
   const token = authorization.replace('Bearer ', '');
 
+  console.log("🔑 Token recebido:", token);
+
   let payload;
 
   try {
