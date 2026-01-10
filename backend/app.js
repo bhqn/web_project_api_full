@@ -10,8 +10,12 @@ const cors = require("cors");
 const app = express();
 // Middleware CORS
 app.use(cors({
-  origin: 'https://web-project-frontend-git-main-bernardos-projects-04d5b6bc.vercel.app',
-  credentials: true, // se enviar token/cookies
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    /\.vercel\.app$/   // aceita QUALQUER frontend da Vercel
+  ],
+  credentials: true,
   methods: ['GET','POST','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization']
 }));
