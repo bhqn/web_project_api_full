@@ -6,17 +6,14 @@ this._baseUrl = options.baseUrl;
   // método para atualizar o token depois do login
 
 _makeRequest(endpoint, options = {}) {
-  const token = localStorage.getItem('jwt');
-
-  console.log('➡️ Enviando token:', token);
+  const headers = {
+    ...this._headers,
+    ...options.headers, // 👈 merge correto
+  };
 
   return fetch(`${this._baseUrl}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` }),
-      ...options.headers,
-    },
+    headers,
   }).then(this._handleServerResponse);
 }
 
