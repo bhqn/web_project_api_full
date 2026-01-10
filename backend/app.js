@@ -13,13 +13,12 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
-    /\.vercel\.app$/   // aceita QUALQUER frontend da Vercel
+    /\.vercel\.app$/   // 👈 ESSENCIAL
   ],
   credentials: true,
   methods: ['GET','POST','PATCH','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
+  allowedHeaders: ['Content-Type','Authorization'],
 }));
-
 //para rodar teste
 //if (process.env.NODE_ENV !== "test") {
 //mongoose.connect(process.env.MONGO_URI);
