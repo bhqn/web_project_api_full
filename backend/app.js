@@ -5,62 +5,48 @@ const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 const { createUser, login } = require("./controllers/users");
 const cors = require("cors");
-
+const auth = require("./middlewares/auth"); // 👈 ADICIONADO
 
 const app = express();
-// Middleware CORS
+
+// CORS
 app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
-    /\.vercel\.app$/   // 👈 ESSENCIAL
+    /\.vercel\.app$/,
   ],
   credentials: true,
   methods: ['GET','POST','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
 }));
-//para rodar teste
-//if (process.env.NODE_ENV !== "test") {
-//mongoose.connect(process.env.MONGO_URI);
-//}
-//mongoose.connect(process.env.MONGO_URI, {
-//  useNewUrlParser: true,
- // useUnifiedTopology: true,
-//});
-
-
 
 app.use(express.json());
 
-// Rotas que NÃO precisam de autenticação
+// 🔓 ROTAS PÚBLICAS
 app.post("/signup", createUser);
 app.post("/signin", login);
 
-// MIDDLEWARE DE AUTORIZAÇÃO TEMPORÁRIA (ANTES DAS ROTAS!)
-/*app.use((req, res, next) => {
-  req.user = {
-    _id: "6924be802b78f9c6ea42c848",
-  };
-  next();
-}); */
+// 🔐 AUTH TEM QUE VIR AQUI
+app.use(auth);
 
-// rota para a raiz do site
+// rota raiz
 app.get("/", (req, res) => {
-  res.json({ message: "Servidor rodando " });
+  res.json({ message: "Servidor rodando" });
 });
 
-// criando as rotas
+// 🔒 ROTAS PROTEGIDAS
 app.use("/users", usersRouter);
 app.use("/cards", cardsRouter);
 
-// Middleware para recursos não encontrados (404)
+// 404
 app.use((req, res) => {
   res.status(404).json({
     message: "Recurso requisitado não encontrado",
   });
 });
 
-// Middleware de tratamento de erros (deve ser o último)
+// erro
 app.use((err, req, res, next) => {
   console.error(err);
   const statusCode = err.statusCode || 500;
