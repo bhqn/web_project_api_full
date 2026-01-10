@@ -5,7 +5,7 @@ const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 const { createUser, login } = require("./controllers/users");
 const cors = require("cors");
-const auth = require("./middlewares/auth"); // 👈 ADICIONADO
+const auth = require("./middlewares/auth"); // 👈 IMPORTANTE
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
-    /\.vercel\.app$/,
+    /\.vercel\.app$/
   ],
   credentials: true,
   methods: ['GET','POST','PATCH','DELETE','OPTIONS'],
@@ -23,19 +23,19 @@ app.use(cors({
 
 app.use(express.json());
 
-// 🔓 ROTAS PÚBLICAS
+// Rotas públicas
 app.post("/signup", createUser);
 app.post("/signin", login);
 
-// 🔐 AUTH TEM QUE VIR AQUI
+// 🔐 AQUI entra o middleware de autenticação
 app.use(auth);
 
-// rota raiz
+// Rota raiz (opcional estar protegida)
 app.get("/", (req, res) => {
   res.json({ message: "Servidor rodando" });
 });
 
-// 🔒 ROTAS PROTEGIDAS
+// Rotas protegidas
 app.use("/users", usersRouter);
 app.use("/cards", cardsRouter);
 
@@ -46,12 +46,12 @@ app.use((req, res) => {
   });
 });
 
-// erro
+// Erros
 app.use((err, req, res, next) => {
   console.error(err);
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Ocorreu um erro no servidor";
-  res.status(statusCode).json({ message });
+  res.status(err.statusCode || 500).json({
+    message: err.message || "Erro interno do servidor",
+  });
 });
 
 module.exports = app;
