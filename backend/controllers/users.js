@@ -113,7 +113,7 @@ module.exports.login = (req, res) => {
       }
 
       // 9 Trata qualquer outro erro interno do servidor
-      return res.status(500).json({ message: "Erro interno do servidor" });
+      return res.status(500).json({ message: "Erro interno do servidor", error: err.message || err });
     });
 };
 
