@@ -1,13 +1,14 @@
 class Api {
   constructor(options) {
-    this._baseUrl = options.baseUrl;
-    this._headers = options.headers;
+this._baseUrl = options.baseUrl;
   }
 
   // método para atualizar o token depois do login
 
 _makeRequest(endpoint, options = {}) {
   const token = localStorage.getItem('jwt');
+
+  console.log('➡️ Enviando token:', token);
 
   return fetch(`${this._baseUrl}${endpoint}`, {
     ...options,
@@ -16,8 +17,9 @@ _makeRequest(endpoint, options = {}) {
       ...(token && { Authorization: `Bearer ${token}` }),
       ...options.headers,
     },
-  }).then((res) => this._handleServerResponse(res));
+  }).then(this._handleServerResponse);
 }
+
   _handleServerResponse(res) {
     if (res.ok) {
       return res.json();
@@ -47,16 +49,13 @@ _makeRequest(endpoint, options = {}) {
     });
   }
 
-  changeLikeCardStatus(cardId, isLiked) {
-    // Se isLiked for true, remove a curtida (DELETE)
-    // Se isLiked for false, adiciona a curtida (PUT)
-    if (isLiked) {
-      return this.addLike(cardId);
-    } else {
-      return this.removeLike(cardId);
-    }
+changeLikeCardStatus(cardId, isLiked) {
+  if (isLiked) {
+    return this.removeLike(cardId);
+  } else {
+    return this.addLike(cardId);
   }
-
+}
   updateUserInfo(data) {
     return this._makeRequest("/users/me", {
       method: "PATCH",
@@ -101,10 +100,6 @@ _makeRequest(endpoint, options = {}) {
 
 const api = new Api({
   baseUrl: "https://web-project-api-full-tx7d.onrender.com",
-  headers: {
-     authorization: `Bearer ${localStorage.getItem('jwt')}`,
-    "content-type": "application/json",
-  },
 });
 
 export default api;
