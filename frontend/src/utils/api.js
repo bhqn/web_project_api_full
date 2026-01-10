@@ -1,21 +1,24 @@
 class Api {
   constructor(options) {
-this._baseUrl = options.baseUrl;
+    this._baseUrl = options.baseUrl;
   }
 
   // método para atualizar o token depois do login
 
-_makeRequest(endpoint, options = {}) {
-  const headers = {
-    ...this._headers,
-    ...options.headers, // 👈 merge correto
-  };
+  _makeRequest(endpoint, options = {}) {
+    const token = localStorage.getItem('jwt');
 
-  return fetch(`${this._baseUrl}${endpoint}`, {
-    ...options,
-    headers,
-  }).then(this._handleServerResponse);
-}
+    console.log('➡️ Enviando token:', token);
+
+    return fetch(`${this._baseUrl}${endpoint}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...options.headers,
+      },
+    }).then(this._handleServerResponse);
+  }
 
   _handleServerResponse(res) {
     if (res.ok) {
