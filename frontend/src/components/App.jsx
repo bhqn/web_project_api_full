@@ -24,44 +24,41 @@ function App() {
   const [tooltipStatus, setTooltipStatus] = useState(""); // 'success' ou 'error'
   const [tooltipMessage, setTooltipMessage] = useState("");
 
-  useEffect(() => {
-    const jwt = getToken();
-    if (!jwt) {
+ useEffect(() => {
+  const jwt = getToken();
+
+  if (!jwt) {
+    setIsCheckingAuth(false);
+    return;
+  }
+
+  auth.getUserInfo(jwt)
+    .then((authUser) => {
+      // auth → apenas valida o token
+      setUserData(authUser.data);
+      setIsLoggedIn(true);
+
+      // API principal → busca dados reais do app
+      return Promise.all([
+        api.getUserInfo(),
+        api.getInitialCards(),
+      ]);
+    })
+    .then(([userInfo, cards]) => {
+      // 🔥 formato correto da sua API
+      setCurrentUser(userInfo.data);
+
+      setCards(Array.isArray(cards.data) ? cards.data : []);
+    })
+    .catch((err) => {
+      console.error("Erro na verificação de auth:", err);
+      localStorage.removeItem("jwt");
+      setIsLoggedIn(false);
+    })
+    .finally(() => {
       setIsCheckingAuth(false);
-      return;
-    }
-
-    //mantem o usuario logado
-
-    getUserInfo(jwt)
-      .then((email) => {
-        setUserData(email.data);
-        setIsLoggedIn(true);
-        navigate("/");
-      })
-      .catch(() => {
-        // Token inválido
-        localStorage.removeItem("jwt");
-        setIsLoggedIn(false);
-      })
-      .finally(() => {
-        setIsCheckingAuth(false); // ← Sempre para de verificar
-      });
-
-    api
-      .getInitialCards()
-      .then((cardsData) => setCards(cardsData))
-      .catch((error) => console.error("Erro ao buscar cartões:", error));
-  }, []);
-
-  useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userData) => setCurrentUser(userData))
-      .catch((error) =>
-        console.error("Erro ao buscar dados do usuário:", error)
-      );
-  }, []);
+    });
+}, []);
 
   const handleCardLike = async (card) => {
     const isLiked = card.isLiked;
@@ -146,30 +143,35 @@ function App() {
   };
 
   const handleLogin = ({ email, password }) => {
-    if (!email || !password) {
-      return;
-    }
+  if (!email || !password) {
+    console.warn("Email ou senha ausentes");
+    return;
+  }
 
-    auth
-      .authorize({ email, password })
-      .then((data) => {
-        const token = data.token;
-        console.log(`data.login:`, data.token);
+  auth
+    .authorize({ email, password })
+    .then((data) => {
+      // Normaliza o token (evita erro token vs jwt)
+      const token = data?.token || data?.jwt;
 
-        // Verifica se retornou token (ajuste a chave conforme a API)
-        if (data.token || data.jwt) {
-          localStorage.setItem("jwt", token);
-          setUserData({ email: email });
-          setIsLoggedIn(true);
-          navigate("/");
-        } else {
-          console.warn("Token não encontrado na resposta:", data);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+      if (!token) {
+        console.error("Token não retornado pela API:", data);
+        return;
+      }
+
+      // Salva SOMENTE o token puro
+      localStorage.setItem("jwt", token);
+
+      console.log("✅ Login OK — token salvo:", token);
+
+      setUserData({ email });
+      setIsLoggedIn(true);
+      navigate("/");
+    })
+    .catch((err) => {
+      console.error("❌ Erro no login:", err);
+    });
+};
 
   function signOut() {
     localStorage.removeItem("jwt");

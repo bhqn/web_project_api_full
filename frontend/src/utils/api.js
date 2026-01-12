@@ -5,20 +5,20 @@ class Api {
 
   // método para atualizar o token depois do login
 
-  _makeRequest(endpoint, options = {}) {
-    const token = localStorage.getItem('jwt');
+_makeRequest(endpoint, options = {}) {
+  const token = localStorage.getItem('jwt');
 
-    console.log('➡️ Enviando token:', token);
+  console.log('➡️ Enviando token:', token);
+  console.log("URL FINAL:", `${this._baseUrl}${endpoint}`);
 
-    return fetch(`${this._baseUrl}${endpoint}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
-    }).then(this._handleServerResponse);
-  }
+  return fetch(`${this._baseUrl}${endpoint}`, {
+    ...options,
+    headers: {
+  'Content-Type': 'application/json',
+  ...(token && { Authorization: `Bearer ${token}` }),
+}
+  }).then(this._handleServerResponse);
+}
 
   _handleServerResponse(res) {
     if (res.ok) {
