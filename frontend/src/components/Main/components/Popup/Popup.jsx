@@ -1,7 +1,6 @@
 export default function Popup(props) {
   const { onClose, title, children, isImagePopup } = props;
-  console.log("Props recebidas no Popup:", props); // Adicione esta linha
-  console.log("isImagePopup:", isImagePopup); // E esta também
+
   return (
     <div className="popup">
       <div

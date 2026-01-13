@@ -33,25 +33,21 @@ function App() {
   }
 
   auth.getUserInfo(jwt)
-    .then((authUser) => {
-      // auth → apenas valida o token
-      setUserData(authUser.data);
+    .then((userRes) => {
+      setUserData(userRes.data);
       setIsLoggedIn(true);
 
-      // API principal → busca dados reais do app
       return Promise.all([
         api.getUserInfo(),
         api.getInitialCards(),
       ]);
     })
-    .then(([userInfo, cards]) => {
-      // 🔥 formato correto da sua API
-      setCurrentUser(userInfo.data);
-
-      setCards(Array.isArray(cards.data) ? cards.data : []);
+    .then(([userInfoRes, cardsRes]) => {
+      setCurrentUser(userInfoRes.data);
+      setCards(cardsRes.data);
     })
     .catch((err) => {
-      console.error("Erro na verificação de auth:", err);
+      console.error(err);
       localStorage.removeItem("jwt");
       setIsLoggedIn(false);
     })
@@ -60,10 +56,11 @@ function App() {
     });
 }, []);
 
+
   const handleCardLike = async (card) => {
     const isLiked = card.isLiked;
     try {
-      const newCard = await api.changeLikeCardStatus(card._id, !isLiked);
+      const newCard = await api.changeLikeCardStatus(card._id, isLiked);
       setCards((state) =>
         state.map((currentCard) =>
           currentCard._id === card._id ? newCard : currentCard
@@ -113,7 +110,8 @@ function App() {
     api
       .addCard(data)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        console.log(newCard)
+        setCards([newCard.data, ...cards]);
         setPopup(null);
       })
       .catch(console.error);

@@ -50,7 +50,9 @@ _makeRequest(endpoint, options = {}) {
   }
 
 changeLikeCardStatus(cardId, isLiked) {
+  console.log(isLiked, cardId)
   if (isLiked) {
+    
     return this.removeLike(cardId);
   } else {
     return this.addLike(cardId);

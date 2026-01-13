@@ -1,7 +1,7 @@
 import logo from '../../images/logo.png';
 
 function Header({userData, onSignOut}) {
-  console.log("userData no Header:", userData); // ← Adicione isto
+
 
 
 

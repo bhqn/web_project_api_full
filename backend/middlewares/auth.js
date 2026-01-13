@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  console.log("Authorization header recebido:", req.headers.authorization);
+ 
 
   const { authorization } = req.headers;
 
@@ -14,6 +14,7 @@ module.exports = (req, res, next) => {
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     req.user = payload;
+    console.log("JWT PAYLOAD RECEBIDO:", payload);
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Token inválido' });

@@ -16,15 +16,15 @@ const Register = ({ handleRegistration }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("handleSubmit chamado — state atual:", data);
+    
 
     if (!data.email || !data.password) {
-      console.log("Preencha todos os campos");
+      
       return;
     }
 
     handleRegistration(data);
-    console.log("Dados enviados:", data);
+
   };
 
   return (
