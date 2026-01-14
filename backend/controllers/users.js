@@ -56,6 +56,28 @@ module.exports.updateAvatar = (req, res, next) => {
     .catch(next);
 };
 
+module.exports.updateDescription = (req, res, next) => {
+  User.findByIdAndUpdate(
+    // ID do usuário
+    req.user._id,
+    // O que atualizar
+    { name: req.body.name,
+      about:req.body.about
+     },
+    // opções
+    { new: true, runValidators: true }
+  )
+    // eslint-disable-next-line consistent-return
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: "Usuário não encontrado" });
+      }
+      res.send({ data: user });
+    })
+    .catch(next);
+};
+
+
 // POST /users - cria novo usuário
 module.exports.createUser = (req, res) => {
   const { email, password, name, about, avatar } = req.body;
