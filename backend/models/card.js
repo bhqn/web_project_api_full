@@ -1,30 +1,37 @@
-const cardSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
-  },
-  link: {
-    type: String,
-    required: true,
-    validate: {
-      validator(v) {
-        return /^https?:\/\/.+/.test(v);
-      },
-      message: 'Link deve ser uma URL válida',
+const mongoose = require("mongoose");
+
+const cardSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 30,
     },
+    link: {
+      type: String,
+      required: true,
+      validate: {
+        validator(v) {
+          return /^https?:\/\/.+/.test(v);
+        },
+        message: 'Link deve ser uma URL válida',
+      },
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
+    likes: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+      default: [],
+    }],
   },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
-    required: true,
-  },
-  likes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
-    default: [],
-  }],
-});
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("Card", cardSchema);
