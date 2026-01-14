@@ -36,12 +36,17 @@ module.exports.likeCard = (req, res, next) => {
 
 // PUT /cards/:cardId/likes - dá like no cartão
 module.exports.dislikeCard = (req, res, next) => {
+  onsole.log("USER ID:", req.user._id, typeof req.user._id);
+console.log("LIKES:", card.likes);
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: req.user._id } },
-    { new: true },
+    { 
+      $pull: { 
+        likes: new mongoose.Types.ObjectId(req.user._id) 
+      } 
+    },
+    { new: true }
   )
-    // eslint-disable-next-line consistent-return
     .then((card) => {
       if (!card) {
         return res.status(404).send({ message: "Card não encontrado" });
