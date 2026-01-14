@@ -63,7 +63,7 @@ function App() {
       const newCard = await api.changeLikeCardStatus(card._id, isLiked);
       setCards((state) =>
         state.map((currentCard) =>
-          currentCard._id === card._id ? newCard : currentCard
+          currentCard._id === card._id ? newCard.data : currentCard
         )
       );
     } catch (error) {
