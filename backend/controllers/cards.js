@@ -1,4 +1,5 @@
 const Card = require('../models/card');
+const mongoose = require("mongoose");
 
 // GET /cards - retorna todos os cartões
 module.exports.getCards = (req, res, next) => {
