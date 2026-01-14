@@ -90,7 +90,7 @@ function App() {
     api
       .updateUserInfo(data)
       .then((newData) => {
-        setCurrentUser(newData);
+        setCurrentUser(newData.data);
         setPopup(null);
       })
       .catch(console.error);
@@ -100,7 +100,7 @@ function App() {
     api
       .updateAvatarInfo(data)
       .then((newData) => {
-        setCurrentUser(newData);
+        setCurrentUser(newData.data);
         setPopup(null);
       })
       .catch(console.error);

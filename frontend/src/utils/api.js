@@ -5,20 +5,20 @@ class Api {
 
   // método para atualizar o token depois do login
 
-_makeRequest(endpoint, options = {}) {
-  const token = localStorage.getItem('jwt');
+  _makeRequest(endpoint, options = {}) {
+    const token = localStorage.getItem("jwt");
 
-  console.log('➡️ Enviando token:', token);
-  console.log("URL FINAL:", `${this._baseUrl}${endpoint}`);
+    console.log("➡️ Enviando token:", token);
+    console.log("URL FINAL:", `${this._baseUrl}${endpoint}`);
 
-  return fetch(`${this._baseUrl}${endpoint}`, {
-    ...options,
-    headers: {
-  'Content-Type': 'application/json',
-  ...(token && { Authorization: `Bearer ${token}` }),
-}
-  }).then(this._handleServerResponse);
-}
+    return fetch(`${this._baseUrl}${endpoint}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    }).then(this._handleServerResponse);
+  }
 
   _handleServerResponse(res) {
     if (res.ok) {
@@ -43,21 +43,21 @@ _makeRequest(endpoint, options = {}) {
   }
 
   // metodo para remover like
+
   removeLike(cardId) {
     return this._makeRequest(`/cards/${cardId}/likes`, {
       method: "DELETE",
     });
   }
 
-changeLikeCardStatus(cardId, isLiked) {
-  console.log(isLiked, cardId)
-  if (isLiked) {
-    
-    return this.removeLike(cardId);
-  } else {
-    return this.addLike(cardId);
+  changeLikeCardStatus(cardId, isLiked) {
+    console.log(isLiked, cardId);
+    if (isLiked) {
+      return this.removeLike(cardId);
+    } else {
+      return this.addLike(cardId);
+    }
   }
-}
   updateUserInfo(data) {
     return this._makeRequest("/users/me", {
       method: "PATCH",
