@@ -24,55 +24,51 @@ function App() {
   const [tooltipStatus, setTooltipStatus] = useState(""); // 'success' ou 'error'
   const [tooltipMessage, setTooltipMessage] = useState("");
 
- useEffect(() => {
-  const jwt = getToken();
+  useEffect(() => {
+    
+    const jwt = getToken();
 
-  if (!jwt) {
-    setIsCheckingAuth(false);
-    return;
-  }
-
-  auth.getUserInfo(jwt)
-    .then((userRes) => {
-      setUserData(userRes.data);
-      setIsLoggedIn(true);
-
-      return Promise.all([
-        api.getUserInfo(),
-        api.getInitialCards(),
-      ]);
-    })
-    .then(([userInfoRes, cardsRes]) => {
-      setCurrentUser(userInfoRes.data);
-      setCards(cardsRes.data);
-    })
-    .catch((err) => {
-      console.error(err);
-      localStorage.removeItem("jwt");
-      setIsLoggedIn(false);
-    })
-    .finally(() => {
+    if (!jwt) {
       setIsCheckingAuth(false);
-    });
-}, []);
+      return;
+    }
 
+    auth
+      .getUserInfo(jwt)
+      .then((userRes) => {
+        setUserData(userRes.data);
+        setIsLoggedIn(true);
 
-const handleCardLike = async (card) => {
-  const isLiked = card.likes.some(
-    (id) => id === currentUser._id
-  );
+        return Promise.all([api.getUserInfo(), api.getInitialCards()]);
+      })
+      .then(([userInfoRes, cardsRes]) => {
+        setCurrentUser(userInfoRes.data);
+        setCards(cardsRes.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        localStorage.removeItem("jwt");
+        setIsLoggedIn(false);
+      })
+      .finally(() => {
+        setIsCheckingAuth(false);
+      });
+  }, []);
 
-  try {
-    const newCard = await api.changeLikeCardStatus(card._id, isLiked);
-    setCards((state) =>
-      state.map((currentCard) =>
-        currentCard._id === card._id ? newCard.data : currentCard
-      )
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
+  const handleCardLike = async (card) => {
+    const isLiked = card.likes.some((id) => id === currentUser._id);
+
+    try {
+      const newCard = await api.changeLikeCardStatus(card._id, isLiked);
+      setCards((state) =>
+        state.map((currentCard) =>
+          currentCard._id === card._id ? newCard.data : currentCard
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleInfoTooltip = (status, message) => {
     setTooltipStatus(status);
@@ -88,8 +84,6 @@ const handleCardLike = async (card) => {
       console.error("Erro ao remover card:", error);
     }
   };
-
-  
 
   const handleUpdateUser = (data) => {
     api
@@ -115,7 +109,6 @@ const handleCardLike = async (card) => {
     api
       .addCard(data)
       .then((newCard) => {
-        console.log(newCard)
         setCards([newCard.data, ...cards]);
         setPopup(null);
       })
@@ -146,38 +139,38 @@ const handleCardLike = async (card) => {
   };
 
   const handleLogin = ({ email, password }) => {
-  if (!email || !password) {
-    console.warn("Email ou senha ausentes");
-    return;
-  }
+    if (!email || !password) {
+      console.warn("Email ou senha ausentes");
+      return;
+    }
 
-  auth
-    .authorize({ email, password })
-    .then((data) => {
-      // Normaliza o token (evita erro token vs jwt)
-      const token = data?.token || data?.jwt;
+    auth
+      .authorize({ email, password })
+      .then((data) => {
+        // Normaliza o token (evita erro token vs jwt)
+        const token = data?.token || data?.jwt;
 
-      if (!token) {
-        console.error("Token não retornado pela API:", data);
-        return;
-      }
+        if (!token) {
+          console.error("Token não retornado pela API:", data);
+          return;
+        }
 
-      // Salva SOMENTE o token puro
-      localStorage.setItem("jwt", token);
+        // Salva SOMENTE o token puro
+        localStorage.setItem("jwt", token);
 
-      console.log("✅ Login OK — token salvo:", token);
-
-      setUserData({ email });
-      setIsLoggedIn(true);
-      navigate("/");
-    })
-    .catch((err) => {
-      console.error("❌ Erro no login:", err);
-    });
-};
+        setUserData({ email });
+        setIsLoggedIn(true);
+        navigate("/");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.error("❌ Erro no login:", err);
+      });
+  };
 
   function signOut() {
     localStorage.removeItem("jwt");
+    setCurrentUser(null);
     setIsLoggedIn(false);
     navigate("/login");
   }

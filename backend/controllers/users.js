@@ -122,7 +122,7 @@ module.exports.login = (req, res) => {
             expiresIn: "7d",
           });
 
-          console.log("🎟 Token gerado no login:", token);
+
 
           //  7 Retorna o token no corpo da resposta
           return res.status(200).json({ token });

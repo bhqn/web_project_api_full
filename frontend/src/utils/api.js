@@ -8,9 +8,6 @@ class Api {
   _makeRequest(endpoint, options = {}) {
     const token = localStorage.getItem("jwt");
 
-    console.log("➡️ Enviando token:", token);
-    console.log("URL FINAL:", `${this._baseUrl}${endpoint}`);
-
     return fetch(`${this._baseUrl}${endpoint}`, {
       ...options,
       headers: {
@@ -51,7 +48,6 @@ class Api {
   }
 
   changeLikeCardStatus(cardId, isLiked) {
-    console.log(isLiked, cardId);
     if (isLiked) {
       return this.removeLike(cardId);
     } else {

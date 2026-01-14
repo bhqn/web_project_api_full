@@ -1,11 +1,11 @@
-const Card = require('../models/card');
+const Card = require("../models/card");
 const mongoose = require("mongoose");
 
 // GET /cards - retorna todos os cartões
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .sort({ _id: -1 })
-    .then(cards => res.send({ data: cards }))
+    .then((cards) => res.send({ data: cards }))
     .catch(next);
 };
 
@@ -23,7 +23,7 @@ module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true },
+    { new: true }
   )
     // eslint-disable-next-line consistent-return
     .then((card) => {
@@ -37,8 +37,6 @@ module.exports.likeCard = (req, res, next) => {
 
 // PUT /cards/:cardId/likes - dá like no cartão
 module.exports.dislikeCard = (req, res, next) => {
-  console.log("REQ.USER:", req.user);
-  console.log("REQ.USER._ID:", req.user?._id);
   if (!req.user || !req.user._id) {
     return res.status(401).send({ message: "Usuário não autenticado" });
   }
@@ -70,20 +68,19 @@ module.exports.dislikeCard = (req, res, next) => {
     .catch(next);
 }; */
 
-
 module.exports.deleteCard = (req, res, next) => {
   // Primeiro: buscar o cartão para verificar o dono
   Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Cartão não encontrado' });
+        return res.status(404).send({ message: "Cartão não encontrado" });
       }
-      
+
       // Segundo: verificar se o usuário é o dono do cartão
       if (card.owner.toString() !== req.user._id) {
-        return res.status(403).send({ message: 'Acesso negado' });
+        return res.status(403).send({ message: "Acesso negado" });
       }
-      
+
       // Terceiro: se for o dono, pode deletar
       return Card.findByIdAndDelete(req.params.cardId);
     })
