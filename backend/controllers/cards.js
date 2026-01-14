@@ -36,15 +36,15 @@ module.exports.likeCard = (req, res, next) => {
 
 // PUT /cards/:cardId/likes - dá like no cartão
 module.exports.dislikeCard = (req, res, next) => {
-  onsole.log("USER ID:", req.user._id, typeof req.user._id);
-console.log("LIKES:", card.likes);
+  console.log("REQ.USER:", req.user);
+  console.log("REQ.USER._ID:", req.user?._id);
+  if (!req.user || !req.user._id) {
+    return res.status(401).send({ message: "Usuário não autenticado" });
+  }
+
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { 
-      $pull: { 
-        likes: new mongoose.Types.ObjectId(req.user._id) 
-      } 
-    },
+    { $pull: { likes: new mongoose.Types.ObjectId(req.user._id) } },
     { new: true }
   )
     .then((card) => {

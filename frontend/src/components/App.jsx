@@ -57,19 +57,22 @@ function App() {
 }, []);
 
 
-  const handleCardLike = async (card) => {
-    const isLiked = card.isLiked;
-    try {
-      const newCard = await api.changeLikeCardStatus(card._id, isLiked);
-      setCards((state) =>
-        state.map((currentCard) =>
-          currentCard._id === card._id ? newCard.data : currentCard
-        )
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const handleCardLike = async (card) => {
+  const isLiked = card.likes.some(
+    (id) => id === currentUser._id
+  );
+
+  try {
+    const newCard = await api.changeLikeCardStatus(card._id, isLiked);
+    setCards((state) =>
+      state.map((currentCard) =>
+        currentCard._id === card._id ? newCard.data : currentCard
+      )
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const handleInfoTooltip = (status, message) => {
     setTooltipStatus(status);
@@ -85,6 +88,8 @@ function App() {
       console.error("Erro ao remover card:", error);
     }
   };
+
+  
 
   const handleUpdateUser = (data) => {
     api
