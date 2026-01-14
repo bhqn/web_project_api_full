@@ -13,7 +13,7 @@ const {
 router.get("/", auth, getCards);
 router.post("/", auth, createCard);
 router.put("/:cardId/likes", auth, likeCard);
-router.delete("/:cardId/dislikes", auth, dislikeCard);
+router.delete("/:cardId/likes", auth, dislikeCard);
 router.delete("/:cardId", auth, deleteCard);
 
 
