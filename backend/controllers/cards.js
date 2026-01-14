@@ -3,8 +3,9 @@ const Card = require('../models/card');
 // GET /cards - retorna todos os cartões
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.send({ data: cards }))
-    .catch(next); // erro para o midleware
+    .sort({ _id: -1 })
+    .then(cards => res.send({ data: cards }))
+    .catch(next);
 };
 
 // POST /cards - cria novo cartão
