@@ -2,8 +2,6 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-
-
 // GET /users - retorna todos os usuários
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -61,9 +59,7 @@ module.exports.updateDescription = (req, res, next) => {
     // ID do usuário
     req.user._id,
     // O que atualizar
-    { name: req.body.name,
-      about:req.body.about
-     },
+    { name: req.body.name, about: req.body.about },
     // opções
     { new: true, runValidators: true }
   )
@@ -77,7 +73,6 @@ module.exports.updateDescription = (req, res, next) => {
     .catch(next);
 };
 
-
 // POST /users - cria novo usuário
 module.exports.createUser = (req, res) => {
   const { email, password, name, about, avatar } = req.body;
@@ -87,7 +82,9 @@ module.exports.createUser = (req, res) => {
       return User.create({ email, password: hash, name, about, avatar });
     })
     .then((user) => res.status(201).send({ data: user }))
-    .catch((err) => res.status(400).send({ message: "Dados inválidos" }));
+    .catch((err) => res.status(400).send({ message: "Dados inválidos" }))
+    .catch((err) => res.status(409).send({ message: "Esse Email já existente" }));
+    
 };
 
 module.exports.login = (req, res) => {
@@ -122,8 +119,6 @@ module.exports.login = (req, res) => {
             expiresIn: "7d",
           });
 
-
-
           //  7 Retorna o token no corpo da resposta
           return res.status(200).json({ token });
         });
@@ -135,9 +130,11 @@ module.exports.login = (req, res) => {
       }
 
       // 9 Trata qualquer outro erro interno do servidor
-      return res.status(500).json({ message: "Erro interno do servidor", error: err.message || err });
+      return res
+        .status(500)
+        .json({
+          message: "Erro interno do servidor",
+          error: err.message || err,
+        });
     });
 };
-
-
-
