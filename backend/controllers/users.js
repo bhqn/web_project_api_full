@@ -82,8 +82,20 @@ module.exports.createUser = (req, res) => {
       return User.create({ email, password: hash, name, about, avatar });
     })
     .then((user) => res.status(201).send({ data: user }))
-    .catch((err) => res.status(400).send({ message: "Dados inválidos" }))
-    .catch((err) => res.status(409).send({ message: "Esse Email já existente" }));
+       .catch((err) => {
+      //  Email duplicado
+      if (err.code === 11000 && err.keyPattern?.email) {
+        return res.status(409).send({
+          message: "Esse email já existe",
+        });
+      }
+
+      //  Qualquer outro erro
+      return res.status(400).send({
+        message: "Dados inválidos",
+      });
+    });
+
     
 };
 
