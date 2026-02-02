@@ -81,7 +81,13 @@ module.exports.createUser = (req, res) => {
     .then((hash) => {
       return User.create({ email, password: hash, name, about, avatar });
     })
-    .then((user) => res.status(201).send({ data: user }))
+    .then((user) => res.status(201).send({   data: {
+      _id: user._id,
+      email: user.email,
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+    }, }))
        .catch((err) => {
       //  Email duplicado
       if (err.code === 11000 && err.keyPattern?.email) {
